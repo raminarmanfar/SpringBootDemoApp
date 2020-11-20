@@ -1,20 +1,17 @@
 package com.armanfar.springdemo.topic;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TopicService {
-    private List<Topic> topics =new ArrayList<>(Arrays.asList(
+    private final List<Topic> topics =new ArrayList<>(Arrays.asList(
             new Topic(10, "Math", "Ramin's description."),
             new Topic(20, "C#", "Amin's description."),
-            new Topic(30, "Java", "Roya's description."),
+            new Topic(30, "Java", "Arman's description."),
             new Topic(40, "Angular", "Amir's description.")
     ));
 
@@ -27,7 +24,7 @@ public class TopicService {
     }
 
     public String addTopics(Topic topic) {
-        if (topics.stream().filter(item -> item.getId() == topic.getId()).count() > 0) {
+        if (topics.stream().anyMatch(item -> item.getId() == topic.getId())) {
             return "Topic with id " + topic.getId() + " has already been exist in the list.";
         }
         topics.add(topic);
@@ -37,7 +34,7 @@ public class TopicService {
     public String updateTopics(Topic topic, Integer id) {
         for(Topic t: topics) {
             if (t.getId() == id) {
-                if (id != topic.getId() && topics.stream().filter(item -> item.getId() == topic.getId()).count() > 0) {
+                if (topic.getId() != id && topics.stream().anyMatch(item -> item.getId() == topic.getId())) {
                     return "Error: The topic with id " + topic.getId() + " has already been exist in the list.";
                 }
                 topics.set(topics.indexOf(t), topic);
